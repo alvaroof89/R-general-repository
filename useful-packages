@@ -1,0 +1,79 @@
+#-------------------------------------------
+# Useful packages to install
+#-------------------------------------------
+
+#For time series
+install.packages("zoo")
+
+#For using ARIMA model
+install.packages("forecast")
+
+#Curvas ROC
+install.packages("ROCR")
+
+#imputation anf filling of missing values
+install.packages("mice")
+
+#For using sample.split()
+install.packages("caTools")
+
+#for plots
+install.packages("ggplot2")
+
+#for CART
+install.packages("rpart")
+install.packages("rpart.plot")
+install.packages("randomForest")
+install.packages("class")
+install.packages("caret")
+install.packages("e1071")
+
+#text analytics
+install.packages("tm")
+install.packages("SnowballC")
+
+#K-MEANS testin
+install.packages("flexclust")
+
+#MCA Analysis
+install.packages("FactoMineR")
+
+#JSON
+install.packages("jsonlite")
+
+#GET (URL)
+install.packages("RCurl")
+
+#Recommenderlab
+install.packages("recommenderlab")
+
+#Web Services
+install.packages("Rook")
+
+#SHINY APP
+install.packages('rsconnect')
+install.packages("RSQLite")
+install.packages(c('shiny', 'ggvis', 'dplyr', 'RSQLite'))
+
+
+#Data Manipulation
+install.packages("plyr")
+install.packages("dplyr")
+install.packages("tidyr")
+install.packages("reshape")
+install.packages("data.table")
+install.packages("splitstackshape")
+install.packages("reshape2")
+
+
+#SQL Package
+install.packages("sqldf")
+
+#Biclustering
+install.packages("biclust")
+
+#recommender package
+install.packages("recommenderlab")
+
+#EXCEL
+install.packages("xlsx")
