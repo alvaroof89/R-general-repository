@@ -77,3 +77,6 @@ install.packages("recommenderlab")
 
 #EXCEL
 install.packages("xlsx")
+
+#GRadient Boosting
+install.packages("xgboost")
