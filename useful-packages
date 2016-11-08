@@ -19,6 +19,7 @@ install.packages("caTools")
 
 #for plots
 install.packages("ggplot2")
+install.packages("ggmap")
 
 #for CART
 install.packages("rpart")
@@ -49,6 +50,7 @@ install.packages("recommenderlab")
 
 #Web Services
 install.packages("Rook")
+install.packages("googleVis")
 
 #SHINY APP
 install.packages('rsconnect')
@@ -80,3 +82,24 @@ install.packages("xlsx")
 
 #GRadient Boosting
 install.packages("xgboost")
+
+#instalar devtools
+install.packages("devtools")
+
+#githhub packages
+library(devtools)
+install_github("ggbiplot", "vqv")
+
+#Data mining with R. SMOTE
+install.packages("DMwR")
+
+#KNN
+install.packages("FNN")
+
+
+#XGBoost
+install.packages("readr")
+install.packages("drat", repos="https://cran.rstudio.com")
+drat:::addRepo("dmlc")
+install.packages("xgboost", repos="http://dmlc.ml/drat/", type = "source")
+
