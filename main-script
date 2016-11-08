@@ -231,6 +231,8 @@ loans[vars.for.imputation] = imputed
 
 
 #CART method
+library(rpart)
+library(rpart.plot)
 StevensTree <- rpart(Reverse ~ Circuit + Issue + Petitioner 
                      + Respondent + LowerCourt + Unconst, data=train, method = "class", minbucket = 25)
 
@@ -248,8 +250,8 @@ Train <- subset(stevens, split == TRUE)
 Test <- subset(stevens, split == FALSE)
 Train$Reverse <- as.factor(Train$Reverse) #the varible that is intented to be forecasted has to be a factor
 Test$Reverse <- as.factor(Test$Reverse)
-stevensForest <- randomForest(Reverse ~Circuit + Issue + 
-Petitioner + Respondent + LowerCourt + Unconst, data=Train, nodesize = 25, ntree = 200)
+stevensForest <- randomForest(as.factor(Reverse) ~Circuit + Issue + 
+Petitioner + Respondent + LowerCourt + Unconst, data=Train, nodesize = 25, ntree = 200, importance = TRUE)
 PredictForest <- predict(stevensForest, newdata = Test)
 a <- table(Test$Reverse, PredictForest)
 acc <- (a[2,2]+a[1,1])/(a[2,2]+a[1,1]+a[1,2]+a[2,1])
@@ -258,6 +260,7 @@ acc
 #RandomForest loses interpretability with respect to CART models, but we
 #can gain insight on which variables were used thrpough the following
 
+importance(model)
 vu = varUsed(MODEL, count=TRUE)
 vusorted = sort(vu, decreasing = FALSE, index.return = TRUE)
 dotchart(vusorted$x, names(MODEL$forest$xlevels[vusorted$ix]))
@@ -477,3 +480,88 @@ ratingmat <- as.matrix(ratingmat)
 #aggregate data frames, summarizing some variable
 wordmat <- aggregate(tags$tag, by = list(tags$movieId), paste, collapse = " ") #aggregate all the tags per movie
 names(wordmat) <- c("movieID", "tag")
+
+#only correlating numeric variable
+cor(train[sapply(train, is.numeric)])
+
+
+#PCA Principal Component analysis
+# apply PCA - scale. = TRUE is highly 
+# advisable, but default is FALSE. 
+split <- sapply(train,is.numeric)
+train_numeric <- train[,split]
+ir.pca <- prcomp(train_numeric,
+                 center = TRUE,
+                 scale. = TRUE) 
+# print method
+print(ir.pca)
+# plot method
+plot(ir.pca, type = "l")
+# summary method
+summary(ir.pca)
+# Predict PCs
+predict(ir.pca, 
+        newdata=tail(log.ir, 2))
+
+#PCA plots
+library(devtools)
+install_github("ggbiplot", "vqv")
+
+library(ggbiplot)
+g <- ggbiplot(ir.pca, obs.scale = 1, var.scale = 1, 
+              groups = ir.species, ellipse = TRUE, 
+              circle = TRUE)
+g <- g + scale_color_discrete(name = '')
+g <- g + theme(legend.direction = 'horizontal', 
+               legend.position = 'top')
+print(g)
+
+#PCA con caret
+require(caret)
+trans = preProcess(train_numeric, 
+                   method=c("BoxCox", "center", 
+                            "scale", "pca"))
+PC = predict(trans, train_numeric)
+
+#PCA con princomp
+arc.pca1 <- princomp(train_numeric, scores=TRUE, cor=TRUE)
+summary(arc.pca1)
+plot(arc.pca1)
+biplot(arc.pca1)
+arc.pca1$scores #print the projection
+
+#PLOT pairwise scatterplots. exploratory data analysis
+pairs(data)
+
+#Exploratory data analysis. categorical. numerical
+library(ggplot2)
+qplot(quantity, data=train, geom="bar", fill=status_group) + 
+  theme(legend.position = "top") + 
+  theme(axis.text.x=element_text(angle = -20, hjust = 0))
+
+ggplot(train, aes(x = construction_year)) + 
+  geom_histogram(bins = 20) + 
+  facet_grid( ~ status_group)
+#CARET preprocessing
+
+require(caret)
+trans = preProcess(data, 
+                   c("BoxCox", "center", "scale"))
+predictorsTrans = data.frame(
+  trans = predict(trans, data))
+
+#SMOTE with DMwR. SMOTE is for ovresamplying categories with less 15%
+library(DMwR)
+train$status_group <- as.factor(train$status_group)
+train <- SMOTE(status_group ~ ., train, perc.over = , perc.under=100)
+
+#Confusion Matrix
+library(caret)
+confusionMatrix(pred_forest_train, train$status_group)
+
+
+#compare variables two by two, to see relations. margin 1 rows margin 2 columns
+prop.table(table(train$payment, train$status_group), margin = 1)
+
+#join data into one variaable
+train$latlong <- paste(round(train$latitude,2), round(train$longitude, 2), sep = ":")
