@@ -565,3 +565,14 @@ prop.table(table(train$payment, train$status_group), margin = 1)
 
 #join data into one variaable
 train$latlong <- paste(round(train$latitude,2), round(train$longitude, 2), sep = ":")
+
+#Integrating Google Analytics with R (Google API)
+library(rga)
+rga.open(instance = "ga")
+id <- 65305947 
+ga$getData(id)
+gaData <- ga$getData(id, start.date = as.Date("2015-09-01"), 
+                     end.date=as.Date("2015-09-30"), metrics = "ga:pageviews,ga:entrances",
+                     dimensions = "ga:date", filter = "ga:country=~United States|Canada;ga:medium==organic",
+                     sort = "-ga:pageviews", start = 10)
+
