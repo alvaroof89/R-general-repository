@@ -103,3 +103,14 @@ install.packages("drat", repos="https://cran.rstudio.com")
 drat:::addRepo("dmlc")
 install.packages("xgboost", repos="http://dmlc.ml/drat/", type = "source")
 
+
+#R Google Analytics API 
+#install devtools package for downloading packages from github
+install.packages("devtools")
+library(devtools)
+#install curl for easier use
+install.packages("curl")
+library(curl)
+#installing rga package from github
+install_github("skardhamar/rga")
+
